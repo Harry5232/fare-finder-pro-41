@@ -1,4 +1,4 @@
-# Fare Finder Pro (41)
+# Fare Finder Pro
 
 Build a SaaS landing page + authenticated app shell for Flight Price Notifier
 (機票降價通知), a product that watches popular flight routes from Taipei and
@@ -29,7 +29,7 @@ Card 3: 🚫 icon — "隨時取消" / "Cancel anytime" —
 
 A simple footer with "© 2026 Flight Price Notifier".
 
-An authenticated area with a /auth page (Supabase email/password auth):
+An authenticated area with a /sign-in page (Supabase email/password auth):
 
 Heading "Welcome back．登入", subtitle "Sign in to manage your fare alerts.",
 Email field (placeholder "you@example.com") and Password field, a primary
@@ -54,23 +54,35 @@ display, payment, custom database tables (do NOT create a subscriptions or
 profiles table — only use Supabase's default auth.users). Those come in
 later milestones. Stick to landing page + auth + placeholder dashboard.
 
-This project was built with [Lovable](https://lovable.dev).
+## Tech stack
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/d7735d8d-4805-46ca-885f-28af105c72af).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- **Vite + React** single-page app (static build, deployed on Vercel)
+- **React Router** for client-side routing (`/`, `/sign-in`, `/sign-up`, `/app`)
+- **Supabase** email/password auth (browser client, RLS-gated publishable key)
+- **Tailwind CSS** + shadcn/ui components
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js and npm.
 
 ```sh
 git clone <this-repository-url>
-cd <repository-name>
-npm i
+cd fare-finder-pro-41
+npm install
 npm run dev
 ```
+
+`npm run build` produces a static SPA in `dist/`.
+
+## Environment variables
+
+Configure these in `.env` (local) and in your Vercel project settings. Both are
+browser-safe: the publishable key is RLS-gated (it replaces the older "anon key").
+
+```sh
+VITE_SUPABASE_URL="https://<your-project-ref>.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_..."
+```
+
+The Supabase client is initialized once in `src/integrations/supabase/client.ts`
+and reads only from `import.meta.env` — there are no hardcoded URLs or keys.
